@@ -9,9 +9,26 @@
 </head>
 
 <body>
+  <!-- login form -->
+  <div id="right-container" class="column">
+    </div>
+
+    <div class="ui input" id="login-form-div">
+    <form autocomplete="off" id="login-form" class="" action="index.html" method="post">
+      <h3>Please Enter Your Name</h3>
+      <input id="login-field" type="text" name="" value="" placeholder="username">
+      <br><br>
+      <input type="submit">
+      <br><br>
+    </form>
+    </div>
+  </div>
+  
   <div id="filter-div">
     <button id="my-recipes-filter">Filter my recipes: OFF</button>
   </div>
+  <button id='prev-btn'> <= </button>
+  <button id='next-btn'> => </button>
   <div id='card-gallery'>
       <div id="recipe-card">
         <h3 id='recipe-name' data-id=''>NAME GOES HERE</h3><br>
@@ -27,15 +44,11 @@
         <img id='recipe-photo' src=''><br>
         <button id='add-review'> Add a Review </button>
         <button id='see-reviews'> See all Reviews </button>
-
-
       </div>
   </div>
   <div id="review-form">
 
   </div>
-  <button id='prev-btn'><=</button>
-  <button id='next-btn'>=></button>
 
 <script src='src/index.js'></script>
 <script src='src/api.js'></script>
