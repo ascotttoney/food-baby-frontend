@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const prevBtn = document.getElementById('prev-btn')
   const nextBtn = document.getElementById('next-btn')
   const reviewForm = document.getElementById('review-form')
+  const reviewCard = document.getElementById('review-card')
 
   const reviewDescription = document.getElementById('description')
   const reviewPhoto = document.getElementById('photo')
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const welcomeArea = document.querySelector('.welcome-user')
 
   let user_id = 0
-  let review_id = 0
+  // let review_id = 0
   let allRecipesArray = []
   let i = 0
 
@@ -42,15 +43,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function recipeCardObject() {
   document.getElementById('recipe-name').innerText = allRecipesArray[i].name;
   document.getElementById('recipe-name').dataset.id = allRecipesArray[i].id;
-  document.getElementById('recipe-author').innerText = allRecipesArray[i].author;
-  document.getElementById('recipe-yield').innerText = allRecipesArray[i].yield;
-  document.getElementById('recipe-servings').innerText = allRecipesArray[i].servings;
-  document.getElementById('recipe-instructions').innerText = allRecipesArray[i].instructions;
-  document.getElementById('recipe-description').innerText = allRecipesArray[i].description;
-  document.getElementById('recipe-category').innerText = allRecipesArray[i].category;
-  document.getElementById('recipe-cuisine').innerText = allRecipesArray[i].cuisine;
-  document.getElementById('recipe-budget').innerText = allRecipesArray[i].budget;
-  document.getElementById('recipe-hungriness').innerText = allRecipesArray[i].hungriness;
+  document.getElementById('recipe-author').innerText = `By: ${allRecipesArray[i].author}`;
+  document.getElementById('recipe-yield').innerText =`Yields: ${allRecipesArray[i].yield}`;
+  document.getElementById('recipe-servings').innerText = `Serves: ${allRecipesArray[i].servings}`;
+  document.getElementById('recipe-instructions').innerText = `Instructions: ${allRecipesArray[i].instructions}`;
+  document.getElementById('recipe-description').innerText = `Description: ${allRecipesArray[i].description}`;
+  document.getElementById('recipe-category').innerText = `Category: ${allRecipesArray[i].category}`;
+  document.getElementById('recipe-cuisine').innerText = `Cuisine: ${allRecipesArray[i].cuisine}`;
+  document.getElementById('recipe-budget').innerText = `Budget: ${allRecipesArray[i].budget}`;
+  document.getElementById('recipe-hungriness').innerText = `Hungriness: ${allRecipesArray[i].hungriness}`;
   document.getElementById('recipe-photo').src = allRecipesArray[i].photo;
 }
 
@@ -74,6 +75,9 @@ function recipeCardObject() {
     }
     else if (e.target.innerText === 'Add a Review') {
       showAddReviewForm(e)
+    }
+    else if (e.target.innerText === 'See all Reviews') {
+      displayReviews(e)
     }
   }
 
@@ -99,7 +103,7 @@ function recipeCardObject() {
   const sessionInit = {
     fetchUsers:
       fetchUsers()
-      .then (json => console.log('sessionInit', json)),
+      .then (json => console.log('init')),
 
     createUser: (name) => {
       return fetch(`http:localhost:3000/users`, {
@@ -124,28 +128,28 @@ function recipeCardObject() {
 
   function handleCreateReview(e) {
     e.preventDefault()
-    // console.log(e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id)
+    console.log(e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id)
     const title = e.target.title.value
     const description = e.target.description.value
     const photo = e.target.photo.value
     const rating = e.target.rating.value
     user_id = e.target.parentElement.parentElement.querySelector('.welcome-user').childNodes[0].dataset.id
-    const recipe_id = e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id
+    const create_review_recipe_id = e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id
 
     const reviewBody = {
       title: title,
       description: description,
       photo: photo,
       rating: rating,
-      recipe_id: recipe_id,
+      recipe_id: create_review_recipe_id,
       user_id: user_id
     }
 
     if (title) {
       reviewInit.createReview(reviewBody).then(res => {
         e.target.reset()
-        review_id = res.id
-        console.log('current response', res)
+        // review_id = res.id
+        // console.log('current response', res)
       })
     }
     else {
@@ -156,7 +160,7 @@ function recipeCardObject() {
   const reviewInit = {
     fetchReviews:
       fetchReviews()
-      .then (json => console.log('fetch reviews', json)),
+      .then (json => console.log('fetch reviews')),
 
     createReview: (reviewBody) => {
       return fetch(`http:localhost:3000/reviews`, {
@@ -165,10 +169,31 @@ function recipeCardObject() {
         body: JSON.stringify(reviewBody)
       })
       .then(res => res.json())
-      .then('rewiewInit', console.log)
+      .then(data => {
+        console.log(data)
+        document.getElementById('show-review-title').innerText = data.title
+        document.getElementById('show-review-description').innerText = data.description
+        document.getElementById('show-review-photo').innerText = data.photo
+        document.getElementById('show-review-title').innerText = data.rating
+      })
     }
   }
 
+function displayReviews(e){
+  recipe_id = parseInt(e.target.parentElement.children[0].dataset.id)
+    fetchReviews()
+    .then(res => res.forEach(review => {
+      if (review.recipe.id === recipe_id){
+        console.log(review)
+        reviewCard.innerHTML += `
+          <h3 id='show-review-title' data-id='${review.id}'>${review.title}</h3>
+          <span id='show-review-user'>${review.user.name}</span><br>
+          <span id='show-review-description'>${review.description}</span><br>
+          <span id='show-review-photo'>${review.photo}</span><br>
+          <span id='show-review-rating'>${review.rating}</span><br>`
+      }
+    }))
+}
 
 // --- END --- //
 
