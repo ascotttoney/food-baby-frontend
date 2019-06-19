@@ -1,7 +1,7 @@
 // --- RECIPES --- //
 
-function fetchRecipes() {
-  return fetch('http://localhost:3000/recipes/')
+function fetchRecipes(p = '') {
+  return fetch(`http://localhost:3000/recipes/${p}`)
   .then(resp => resp.json())
 }
 
