@@ -5,20 +5,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextBtn = document.getElementById('next-btn')
   const reviewForm = document.getElementById('review-form')
 
+  const reviewDescription = document.getElementById('description')
+  const reviewPhoto = document.getElementById('photo')
+  const reviewRating = document.getElementById('rating')
+  const createReviewButton = document.getElementById('create-review-button')
+
   const loginForm = document.querySelector("#login-form")
   const userNameField = document.querySelector("#login-field")
   const welcomeArea = document.querySelector('.welcome-user')
+
   let user_id = 0
-  //const currentUser = User.last
-
-  loginForm.addEventListener('submit', handleSubmit)
-
+  let review_id = 0
   let allRecipesArray = []
+  let i = 0
 
   document.addEventListener('click', handleClickEvents)
-  reviewForm.addEventListener('click', handleCreateReview)
-
-  let i = 0
+  loginForm.addEventListener('submit', handleSubmit)
+  reviewForm.addEventListener('submit', handleCreateReview)
 
   getRecipes()
 
@@ -76,13 +79,12 @@ function recipeCardObject() {
 
   function handleSubmit(e){
     e.preventDefault()
-    // console.log(e)
 
     const name = userNameField.value
     const body = {name: name}
 
-    if(name){
-      sessionInit.createUser(body).then(res=> {
+    if (name) {
+      sessionInit.createUser(body).then(res => {
         e.target.reset()
         user_id = res.id
         welcomeArea.innerHTML = `<span data-id="${res.id}"> Welcome, ${name}!</span>`
@@ -94,20 +96,10 @@ function recipeCardObject() {
     }
   }
 
-  function welcomeUser(e){
-    // console.log(e)
-    // let user =
-    // const welcomeArea = document.querySelector('.welcome-user')
-    // welcomeArea.innerHTML = <span data-id=`${user.id}`> Welcome, ${user.name}</span>
-  }
-
   const sessionInit = {
-
-    fetchUsers: () => {
-      return fetch(`http:localhost:3000/users`)
-      .then(res=>res.json())
-      .then (json => console.log(json.id))
-    },
+    fetchUsers:
+      fetchUsers()
+      .then (json => console.log('sessionInit', json)),
 
     createUser: (name) => {
       return fetch(`http:localhost:3000/users`, {
@@ -116,14 +108,7 @@ function recipeCardObject() {
         body: JSON.stringify(name)
       })
       .then(res => res.json())
-    },
-
-    // createSession: (review) => {
-    //   return fetch(`http:localhost:3000/reviews`, {
-    //     method: 'POST',
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(body)
-    //   })
+    }
   }
 
   function showAddReviewForm(e){
@@ -133,36 +118,55 @@ function recipeCardObject() {
         <input id='description' placeholder='Leave your review here ...'>
         <input id='photo' placeholder='figure out how to upload a photo ...'>
         <input id='rating' placeholder='Figure out how to add stars ...'>
-        <button data-id="${user_id}">Create</button>
+        <input type="submit" id='create-review-button' data-id="">
       </form>`
   }
 
-  function handleCreateReview(e){
+  function handleCreateReview(e) {
     e.preventDefault()
-    console.log('submit')
-    //
-    // let recipe_id = e.target.parentElement.firstElementChild.dataset.id
-    // let title = e.target.parentElement[0].form[0].value
-    // let description = e.target.parentElement[0].form[1].value
-    // let photo = e.target.parentElement[0].form[2].value
-    // let rating = e.target.parentElement[0].form[3].value
-    //
-    // fetch('http://localhost:3000/reviews', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Accepts: 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     title: title,
-    //     description: description,
-    //     photo: photo,
-    //     rating: rating,
-    //     recipe_id: recipe_id,
-    //     user_id: user_id
-    //   })
-    // })
-    // .then(res => res.json())
+    // console.log(e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id)
+    const title = e.target.title.value
+    const description = e.target.description.value
+    const photo = e.target.photo.value
+    const rating = e.target.rating.value
+    user_id = e.target.parentElement.parentElement.querySelector('.welcome-user').childNodes[0].dataset.id
+    const recipe_id = e.target.parentElement.parentElement.children[6].children['recipe-card'].children[0].dataset.id
+
+    const reviewBody = {
+      title: title,
+      description: description,
+      photo: photo,
+      rating: rating,
+      recipe_id: recipe_id,
+      user_id: user_id
+    }
+
+    if (title) {
+      reviewInit.createReview(reviewBody).then(res => {
+        e.target.reset()
+        review_id = res.id
+        console.log('current response', res)
+      })
+    }
+    else {
+      alert("Please fill out all fields")
+    }
+  }
+
+  const reviewInit = {
+    fetchReviews:
+      fetchReviews()
+      .then (json => console.log('fetch reviews', json)),
+
+    createReview: (reviewBody) => {
+      return fetch(`http:localhost:3000/reviews`, {
+        method: 'POST',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewBody)
+      })
+      .then(res => res.json())
+      .then('rewiewInit', console.log)
+    }
   }
 
 
