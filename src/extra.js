@@ -1,3 +1,28 @@
+= Recipe.find_or_create_by(
+  name: '',
+  author: '',
+  yield: '',
+  servings: '',
+  instructions: "",
+  description: "",
+  photo: '',
+  budget: '$$',
+  hungriness: '/5',
+  cuisine: ''
+)
+
+.recipe_ingredients << RecipeIngredient.find_or_create_by(ingredient_id: .id, recipe_id: .id)
+
+.reviews << Review.find_or_create_by(
+  title: "",
+  user: ,
+  description: "",
+  photo: '',
+  rating: '/5'
+)
+
+
+
 function showRecipeName(recipe){
   const recipeNameSpan = document.createElement('span')
   recipeNameSpan.id = 'recipe-name'
