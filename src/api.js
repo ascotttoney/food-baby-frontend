@@ -33,6 +33,6 @@ function fetchIngredients() {
 // --- RECIPE INGREDIENTS --- //
 
 function fetchRecipeIngredients() {
-  return fetch('http://localhost:3000/recipe_ingredients')
+  return fetch(`http://localhost:3000/recipe_ingredients/`)
   .then(resp => resp.json())
 }
