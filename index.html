@@ -1,65 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="gr__getbootstrap_com">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>FOOD, BABY!</title>
-  <link rel="stylesheet" href="index.css">
+  <title>Food, Baby!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-  <!-- login form -->
-  <div id="right-container" class="column">
-    </div>
 
-    <div class="ui input" id="login-form-div">
-    <form autocomplete="off" id="login-form" class="" action="index.html" method="post">
-      <h3>Please Enter Your Name</h3>
-      <input id="login-field" type="text" name="" value="" placeholder="username" data-id=''>
-      <br><br>
-      <input type="submit">
-      <br><br>
-    </form>
-    </div>
-  </div>
-  <div class='welcome-user'></div>
+  <!-- LOGIN FORM -->
 
-  <div id="filter-div">
-    <button id="my-recipes-filter">Filter my recipes: OFF</button>
-  </div>
-  <button id='prev-btn'> <= </button>
-  <button id='next-btn'> => </button>
-  <div id='card-gallery'>
-      <div id="recipe-card">
-        <h3 id='recipe-name' data-id=''></h3>
-        <span id='recipe-author'></span><br>
-        <span id='recipe-yield'></span><br>
-        <span id='recipe-servings'></span><br>
-        <span id='recipe-instructions'></span><br>
-        <span id='recipe-description'></span><br>
-        <span id='recipe-category'></span><br>
-        <span id='recipe-cuisine'></span><br>
-        <span id='recipe-budget'></span><br>
-        <span id='recipe-hungriness'></span><br>
-        <img id='recipe-photo'><br>
-        <button id='add-review'> Add a Review </button>
-        <button id='see-reviews'> See all Reviews </button>
+  <div class='container text-center' id="login-form-div">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <form autocomplete="off" id="login-form" class="form-signin" action="index.html" method="post">
+            <br><br>
+          <img class="mb-4" src="./public/food-baby-logo-800px.png" alt="Food Baby Logo" width="180" height="180">
+            <hr><br>
+          <h1 class='h3 mb-3 font-weight-normal'> Sign in using your first name. </h1>
+          <input id="login-field" type="text" class="form-control text-center" name="" value="" data-id='' aria-describedby="nameHelp">
+          <small id="nameHelp" class="form-text text-muted">Please use proper titlecase.</small>
+            <br>
+          <button type="submit" class="btn btn-success">Sign In</button>
+        </form>
       </div>
+    </div>
   </div>
 
-  <div id="review-form">
+
+  <!-- AFTER LOGIN -->
+
+  <div id='after-login'>
+    <div class='container text-center'>
+
+      <img src="./public/food-baby-text-logo-1200px.png" class="img-fluid" alt="Food Baby Logo" width="80%">
+      <h3 id='welcome-user' data-id=""></h3>
+
+      <!-- <div id="filter-div">
+        <button id="my-recipes-filter">Filter my recipes: OFF</button>
+      </div> -->
+
+      <hr>
+
+      <h5 class='lead'>Use the buttons below to scroll through our recipes. <br> Share you own culinary adventure in a comment!</h5>
+        <br>
+      <button id='prev-btn' class="btn btn-success"> Back </button>
+      <button id='next-btn' class="btn btn-success"> Next </button>
+
+        <br><br>
+
+      <div id='card-gallery'>
+        <div id="recipe-card" class="card  text-left">
+          <div class="card-body text-justify">
+            <img id='recipe-photo' class="card-img-top"><br><br>
+            <h3 id='recipe-name' data-id=''></h3>
+            <h5 id='recipe-author' class="card-subtitle mb-2 text-muted"></h5><br>
+            <span id='recipe-description' class='lead'></span><br><br>
+            <span class="font-weight-bold">Instructions: </span><span id='recipe-instructions'></span><br><br>
+            <span class="font-weight-bold">Yield: </span>  <span id='recipe-yield'></span><br>
+            <span class="font-weight-bold">Servings: </span><span id='recipe-servings'></span><br>
+            <span class="font-weight-bold">Category: </span><span id='recipe-category'></span><br>
+            <span class="font-weight-bold">Cuisine: </span><span id='recipe-cuisine'></span><br>
+            <span class="font-weight-bold">Budget: </span><span id='recipe-budget'></span><br>
+            <span class="font-weight-bold">Hungriness: </span><span id='recipe-hungriness'></span><br><br>
+            <span class="font-weight-bold">Ingredients: </span><br><br>
+            <ul id='ingredient-list'>
+            </ul>
+              <br><br>
+            <button id='add-review' class="btn btn-primary"> Add a Review </button>
+            <button id='see-reviews' class='btn btn-primary'> See All Reviews </button>
+          </div>
+        </div>
+      </div>
+
+        <br><br>
+
+
+  <!-- COMMENT SECTION -->
+
+      <div id="review-form">
+      </div>
+
+      <div id="review-card">
+        <h3 id='show-review-title' data-id=''></h3>
+        <span id='show-review-user'></span><br>
+        <span id='show-review-description'></span><br>
+        <img id='show-review-photo' src=''></span><br>
+        <span id='show-review-rating'></span>
+      </div>
+
+        <hr>
+
+      <small> © 2019 - PAULA! (feat. Scott) - Prestige Worldwide </small> <br>
+      <img class="mb-4" src="./public/food-baby-logo-800px.png" alt="Food Baby Logo" width="80" height="80">
+
+    </div>
   </div>
 
-  <div id="review-card">
-    <h3 id='show-review-title' data-id=''></h3>
-    <span id='show-review-user'></span><br>
-    <span id='show-review-description'></span><br>
-    <img id='show-review-photo'></span><br>
-    <span id='show-review-rating'></span>
-  </div>
 
-<script src='src/index.js'></script>
-<script src='src/api.js'></script>
+  <!-- END -->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+  <script src='src/index.js'></script>
+  <script src='src/api.js'></script>
+
 </body>
 </html>
