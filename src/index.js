@@ -275,24 +275,33 @@ function recipeCardObject() {
 
         if (current_user === signed_in_user) {
           reviewCard.innerHTML += `
-            <div id='individual-review'>
-              <h3 id='show-review-title' data-id='${review.id}'>${review.title}</h3>
-              <span id='show-review-user'>${review.user.name}</span><br>
-              <span id='show-review-description'>${review.description}</span><br>
-              <img id='show-review-photo' src='${review.photo}'/><br>
-              <span id='show-review-rating'>${review.rating}</span>
-              <button id='delete-btn'>Delete Review</button><button id='delete-btn'>Edit Review</button>
+            <div class='col-sm-6 my-3' id='review-${review.id}' data-id='${review.id}'>
+              <div class='card text-left my-1'>
+                <h3 id='show-review-title' class='card-header' data-id='${review.id}'>${review.title}</h3>
+                  <div class='card-body' data-id='${review.id}'>
+                    <span class='h5'>By: </span><span id='show-review-user' class='h5'>${review.user.name}</span><br><br>
+                    <span id='show-review-description'>${review.description}</span><br><br>
+                    <span id='show-review-rating' class='h5'>${review.rating}</span>
+                      <br><br>
+                    <button id='edit-btn' class="btn btn-success" data-id='${review.id}'>Edit Review</button>  <button id='delete-btn' class="btn btn-danger" data-id='${review.id}'>Delete Review</button>
+                  </div>  
+                <img id='show-review-photo' src='${review.photo}' class="card-img-top" data-id='${review.id}'/><br>
+              </div>
             </div>`
         }
 
         else {
           reviewCard.innerHTML += `
-            <div id='individual-review'>
-              <h3 id='show-review-title' data-id='${review.id}'>${review.title}</h3>
-              <span id='show-review-user'>${review.user.name}</span><br>
-              <span id='show-review-description'>${review.description}</span><br>
-              <img id='show-review-photo' src='${review.photo}'/><br>
-              <span id='show-review-rating'>${review.rating}</span>
+            <div class='col-sm-6 my-3' id='review-${review.id}' data-id='${review.id}'>
+              <div class='card text-left my-1'>
+                <h3 id='show-review-title' class='card-header' data-id='${review.id}'>${review.title}</h3>
+                  <div class='card-body' data-id='${review.id}'>
+                    <span class='h5'>By: </span><span id='show-review-user' class='h5'>${review.user.name}</span><br><br>
+                    <span id='show-review-description'>${review.description}</span><br><br>
+                    <span id='show-review-rating' class='h5'>${review.rating}</span>
+                  </div>  
+                <img id='show-review-photo' src='${review.photo}' class="card-img-top" data-id='${review.id}' /><br>
+              </div>
             </div>`
         }
       }
@@ -301,13 +310,14 @@ function recipeCardObject() {
 
 
   function handleDeleteOrEdit(e) {
+    let reviewId = e.target.dataset.id
+
     if (e.target.innerText === 'Delete Review') {
-      let reviewToDelete = e.target.parentElement
-      let id = e.target.parentElement.children[0].dataset.id
+      let reviewToDelete = e.target.parentElement.parentElement
 
       alert('Are you sure you want to delete?')
 
-      fetch(`http://localhost:3000/reviews/${id}`, {method: 'DELETE'})
+      fetch(`http://localhost:3000/reviews/${reviewId}`, {method: 'DELETE'})
       reviewToDelete.remove()
     }
 
@@ -316,67 +326,73 @@ function recipeCardObject() {
       reviewToEdit.addEventListener('click', handleEditReviewFormClicks)
       reviewToEdit.addEventListener('submit', handleEditReviewFormSubmit)
 
-      let id = e.target.parentElement.children[0].dataset.id
-      // let signed_in_user = welcomeUser.dataset.id
-      let reviewTitleToEdit = e.target.parentElement.children[0].innerHTML
-      let reviewDescriptionToEdit = e.target.parentElement.children[3].innerHTML
-      let reviewUserToUpdate = e.target.parentElement.children[1].innerHTML
-      let reviewPhotoToEdit = e.target.parentElement.children[5].src
+      let reviewTitleToEdit = e.target.parentElement.parentElement.children[0].innerHTML
+      let reviewDescriptionToEdit = e.target.parentElement.children[4].innerHTML
+      let reviewPhotoToEdit = e.target.parentElement.parentElement.children[2].src
       recipe_id = document.getElementById('recipe-name').dataset.id
-      // let reviewRatingToEdit = e.target.parentElement.children[7].innerHTML
 
       reviewToEdit.innerHTML = `
-            <form id='edit-review-form'>
-              <input id='edit-title' value='${reviewTitleToEdit}'>
-              <input id='edit-description' value='${reviewDescriptionToEdit}'>
-              <input id='edit-photo' value='${reviewPhotoToEdit}'>
-              <div id='edit-star-rating-input'>
-                <span id='edit-star1'>☆</span> <span id='edit-star2'>☆</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>
-              </div>
-              <input type="submit" id='edit-review-button' data-id='${id}'>
-            </form>`
+        <div class='container text-left'>
+          <div class="form">
+            <div class='form-group'>
+              <form id='edit-review-form' class="form-signin">
+                <label for="title" class="h5">Title</label>
+                  <input class="form-control" id='title' value="${reviewTitleToEdit}"><br>
+                <label for="photo" class="h5">Photo URL</label>
+                  <input class="form-control" id='photo' value='${reviewPhotoToEdit}'><br>
+                <label for="description" class="h5">Review</label>
+                  <input class="form-control" type='text-area' id='description' value="${reviewDescriptionToEdit}"><br>
+                <div id='edit-star-rating-input' class="h3">
+                  <span id='edit-star1'>☆</span> <span id='edit-star2'>☆</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>
+                </div> <br>
+                <input type="submit" id='edit-review-button' data-id="${reviewId}" class="btn btn-success">
+              </form>
+            </div>
+          </div>
+        </div>`
+
 
       function handleEditReviewFormClicks(e) {
         selectedStar = e.target.id
         if (selectedStar === 'edit-star1') {
           starRating = 1
           document.getElementById('edit-star-rating-input').innerHTML = `
-          <span class='edit-star1'>★</span> <span id='edit-star2'>☆</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
+          <span id='edit-star1'>★</span> <span id='edit-star2'>☆</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
         }
         else if (selectedStar === 'edit-star2') {
           starRating = 2
           document.getElementById('edit-star-rating-input').innerHTML = `
-            <span class='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
+            <span id='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>☆</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
         }
         else if (selectedStar === 'edit-star3') {
           starRating = 3
           document.getElementById('edit-star-rating-input').innerHTML = `
-            <span class='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
+            <span id='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>☆</span> <span id='edit-star5'>☆</span>`
         }
         else if (selectedStar === 'edit-star4') {
           starRating = 4
           document.getElementById('edit-star-rating-input').innerHTML = `
-            <span class='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>★</span> <span id='edit-star5'>☆</span>`
+            <span id='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>★</span> <span id='edit-star5'>☆</span>`
         }
         else if (selectedStar === 'edit-star5') {
           starRating = 5
           document.getElementById('edit-star-rating-input').innerHTML = `
-            <span class='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>★</span> <span id='edit-star5'>★</span>`
+            <span id='edit-star1'>★</span> <span id='edit-star2'>★</span> <span id='edit-star3'>★</span> <span id='edit-star4'>★</span> <span id='edit-star5'>★</span>`
         }
       }
 
       function handleEditReviewFormSubmit(e){
         e.preventDefault()
-        
-        console.log(e.target.innerText)
 
-        let id = e.target.children[4].dataset.id
+        let reviewId = e.target.parentElement.parentNode.parentElement.parentElement.parentElement.children[0].dataset.id
         let newReviewTitle = e.target.parentElement.children[0][0].value
-        let newReviewDescription = e.target.parentElement.children[0][1].value
-        let newReviewPhoto = e.target.parentElement.children[0][2].value
-        let newReviewRating = e.target.innerText
+        let newReviewDescription = e.target.parentElement.children[0][2].value
+        let newReviewPhoto = e.target.parentElement.children[0][1].value
+        let newReviewRating = e.target.children[9].innerText
         let signed_in_user = welcomeUser.dataset.id
         recipe_id = document.getElementById('recipe-name').dataset.id
+
+        let reviewToEditId = document.getElementById(`review-${reviewId}`)
 
         let editReviewBody = {
           title: newReviewTitle,
@@ -387,7 +403,7 @@ function recipeCardObject() {
           user_id: signed_in_user
         }
 
-        fetch(`http://localhost:3000/reviews/${id}`, {
+        fetch(`http://localhost:3000/reviews/${reviewId}`, {
           method: 'PATCH',
           headers:{
             'Content-Type': 'application/json',
@@ -397,19 +413,29 @@ function recipeCardObject() {
         })
         .then(res => res.json())
         .then(data => {
-          reviewCard.innerHTML = `
-            <div id='individual-review'>
-            <h3 id='show-review-title' data-id='${id}'>${data.title}</h3>
-            <span id='show-review-user'>${data.user.name}</span><br>
-            <span id='show-review-description'>${data.description}</span><br>
-            <img id='show-review-photo' src='${data.photo}'/><br>
-            <span id='show-review-rating'>${data.rating}</span>
-            <button id='delete-btn'>Delete Review</button><button id='delete-btn'>Edit Review</button>
-            </div>`
-          })
-        }
+          console.log(data)
+          console.log(data.id)
+          console.log(reviewToEditId.dataset.id)
+
+          if (data.id == reviewToEditId.dataset.id) {
+            reviewToEditId.innerHTML = `
+              <div class='card text-left my-1'>
+                <h3 id='show-review-title' class='card-header' data-id='${data.id}'>${data.title}</h3>
+                  <div class='card-body' data-id='${data.id}'>
+                    <span class='h5'>By: </span><span id='show-review-user' class='h5'>${data.user.name}</span><br><br>
+                    <span id='show-review-description'>${data.description}</span><br><br>
+                    <span id='show-review-rating' class='h5'>${data.rating}</span>
+                      <br><br>
+                    <button id='edit-btn' class="btn btn-success" data-id='${data.id}'>Edit Review</button>  <button id='delete-btn' class="btn btn-danger" data-id='${data.id}'>Delete Review</button>
+                  </div>  
+                <img id='show-review-photo' src='${data.photo}' class="card-img-top" data-id='${data.id}'/><br>
+              </div>`
+          }
+          else console.log('nope')
+        })
       }
     }
+  }
   
 
 // --- END --- //
