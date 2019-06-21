@@ -1,29 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const cardGallery = document.getElementById('card-gallery')
-  const recipeCard = document.getElementById('recipe-card')
+
   const prevBtn = document.getElementById('prev-btn')
   const nextBtn = document.getElementById('next-btn')
   const reviewForm = document.getElementById('review-form')
   const reviewCard = document.getElementById('review-card')
   const ingredientsList = document.getElementById('ingredient-list')
-
-  const reviewDescription = document.getElementById('description')
-  const reviewPhoto = document.getElementById('photo')
-  const createReviewButton = document.getElementById('create-review-button')
   const seeReviewsButton = document.getElementById('see-reviews')
-
-  const showReviewRating = document.getElementById('show-review-rating')
-  const showReviewTitle = document.getElementById('show-review-title')
-  const showReviewDesc = document.getElementById('show-review-description')
-  const showReviewPhoto = document.getElementById('show-review-photo')
-
   const loginFormDiv = document.getElementById('login-form-div')
   const loginForm = document.getElementById("login-form")
   const userNameField = document.getElementById("login-field")
   const welcomeUser = document.getElementById('welcome-user')
-
   const afterLogin = document.getElementById('after-login')
-  afterLogin.style.display = 'none'
+    afterLogin.style.display = 'none'
 
   let user_id = 0
   let allRecipesArray = []
@@ -159,12 +147,13 @@ function recipeCardObject() {
 
 
   function showAddReviewForm(e){
+    // console.log(e)
     reviewForm.innerHTML = `
       <div class='container text-left'>
         <div class="row justify-content-center">
-          <div class='form-group col-lg-6'>
+          <div class='form-group col-lg-6' data-id="">
             <form id='review-form' class="form-signin">
-              <label for="title">Title</label>
+              <label for="title" data-id="">Title</label>
               <input class="form-control text-center" id='title'><br>
               <label for="photo">Photo URL</label>
               <input class="form-control text-center" id='photo'><br>
@@ -183,12 +172,14 @@ function recipeCardObject() {
 
   function handleCreateReview(e) {
     e.preventDefault()
+    
+    console.log(e)
 
-    const title = e.target.title.value
-    const description = e.target.description.value
-    const photo = e.target.photo.value
+    const title = e.target[0].value
+    const description = e.target[2].value
+    const photo = e.target[1].value
     user_id = welcomeUser.dataset.id
-    const create_review_recipe_id = i
+    const create_review_recipe_id = (i + 1)
 
     const reviewBody = {
       title: title,
@@ -213,16 +204,29 @@ function recipeCardObject() {
         body: JSON.stringify(reviewBody)
       })
       .then(res => res.json())
-      .then(data => {
-        showReviewTitle.innerText = data.title
-        showReviewDesc.innerText = data.description
-        document.getElementById('show-review-photo').src = data.photo
+      .then(review => {
+        let starStar = ''
 
-        if (parseInt(data.rating) === 1) showReviewRating.innerText = '★☆☆☆☆'
-        else if (parseInt(data.rating) === 2) showReviewRating.innerText = '★★☆☆☆'
-        else if (parseInt(data.rating) === 3) showReviewRating.innerText = '★★★☆☆'
-        else if (parseInt(data.rating) === 4) showReviewRating.innerText = '★★★★☆'
-        else if (parseInt(data.rating) === 5) showReviewRating.innerText = '★★★★★'
+        if (parseInt(review.rating) === 1) starStar = '★☆☆☆☆'
+        else if (parseInt(review.rating) === 2) starStar = '★★☆☆☆'
+        else if (parseInt(review.rating) === 3) starStar = '★★★☆☆'
+        else if (parseInt(review.rating) === 4) starStar = '★★★★☆'
+        else if (parseInt(review.rating) === 5) starStar = '★★★★★'
+        
+        reviewCard.innerHTML +=
+          `<div class='col-sm-6 my-3' id='review-${review.id}' data-id='${review.id}'>
+            <div class='card text-left my-1'>
+              <h3 id='show-review-title' class='card-header' data-id='${review.id}'>${review.title}</h3>
+                <div class='card-body' data-id='${review.id}'>
+                  <span class='h5'>By: </span><span id='show-review-user' class='h5'>${review.user.name}</span><br><br>
+                  <span id='show-review-description'>${review.description}</span><br><br>
+                  <span id='show-review-rating' class='h5'>${starStar}</span>
+                    <br><br>
+                  <button id='edit-btn' class="btn btn-success" data-id='${review.id}'>Edit Review</button>  <button id='delete-btn' class="btn btn-danger" data-id='${review.id}'>Delete Review</button>
+                </div>  
+              <img id='show-review-photo' src='${review.photo}' class="card-img-top" data-id='${review.id}'/><br>
+            </div>
+          </div>`
       })
     }
   }
@@ -413,10 +417,6 @@ function recipeCardObject() {
         })
         .then(res => res.json())
         .then(data => {
-          console.log(data)
-          console.log(data.id)
-          console.log(reviewToEditId.dataset.id)
-
           if (data.id == reviewToEditId.dataset.id) {
             reviewToEditId.innerHTML = `
               <div class='card text-left my-1'>
@@ -431,7 +431,6 @@ function recipeCardObject() {
                 <img id='show-review-photo' src='${data.photo}' class="card-img-top" data-id='${data.id}'/><br>
               </div>`
           }
-          else console.log('nope')
         })
       }
     }
