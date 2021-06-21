@@ -1,38 +1,40 @@
+const URL = `https://toney-foodbaby-back.herokuapp.com/`
+
 // --- RECIPES --- //
 
 function fetchRecipes(p = '') {
-  return fetch(`http://localhost:3000/recipes/${p}`)
-  .then(resp => resp.json())
+	return fetch(URL + `recipes/${p}`)
+	.then(resp => resp.json())
 }
 
 
 // --- USERS --- //
 
 function fetchUsers() {
-  return fetch('http://localhost:3000/users')
-  .then(resp => resp.json())
+	return fetch(URL + 'users')
+	.then(resp => resp.json())
 }
 
 
 // --- REVIEWS --- //
 
 function fetchReviews() {
-  return fetch('http://localhost:3000/reviews')
-  .then(resp => resp.json())
+	return fetch(URL + 'reviews')
+	.then(resp => resp.json())
 }
 
 
 // --- INGREDIENTS --- //
 
 function fetchIngredients() {
-  return fetch('http://localhost:3000/ingredients')
-  .then(resp => resp.json())
+	return fetch(URL + 'ingredients')
+	.then(resp => resp.json())
 }
 
 
 // --- RECIPE INGREDIENTS --- //
 
 function fetchRecipeIngredients() {
-  return fetch(`http://localhost:3000/recipe_ingredients/`)
-  .then(resp => resp.json())
+	return fetch(URL + `recipe_ingredients/`)
+	.then(resp => resp.json())
 }
